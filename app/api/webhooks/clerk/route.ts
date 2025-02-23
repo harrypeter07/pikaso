@@ -177,18 +177,5 @@ export async function POST(req: Request) {
   console.log('Webhook payload:', body)
 
 
-  if(eventType === 'user.created'){
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-    alert("user createddddd")
-  }
   return new Response('Webhook received', { status: 200 })
 }
