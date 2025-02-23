@@ -7,7 +7,7 @@ import { handleError } from "../utils";
 
 
 
-export async function createuser(user: CreateUserParams){
+export async function createUser(user: CreateUserParams){
     try {
         await connectToDatabase();
 
