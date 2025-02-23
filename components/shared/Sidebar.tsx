@@ -6,9 +6,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { Button } from "../ui/button";
+// import { createUser } from "@/lib/actions/user.actions";
 
 const Sidebar = () => {
 	const pathname = usePathname();
+	
+	// const handleB = ()=> {
+		
+			
+	// 			  const newUser =  createUser(user)
+	// 			  console.log(newUser)
+	// }
 	return (
 		<aside className="sidebar ">
 			<div className="flex size-full flex-col gap-4">
@@ -51,7 +59,7 @@ const Sidebar = () => {
 								);
 							})}
 						</ul>
-
+								{/* <button onClick={handleB}>clickkkkkk</button> */}
 						<ul className="sidebar-nav_elements">
 							{navLinks.slice(6).map((link) => {
 								const isActive = link.route === pathname;

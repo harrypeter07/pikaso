@@ -1,11 +1,11 @@
 import { Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema({
-  clerkId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  // clerkId: {
+  //   type: String,
+  //   required: true,
+  //   unique: true,
+  // },
   email: {
     type: String,
     required: true,
@@ -17,15 +17,15 @@ const UserSchema = new Schema({
     unique: true,
   },
   photo: {
-    type: Image,
+    type: String,
     required: true,
   },
-  firstName: {
-    type: String,
-  },
-  lastName: {
-    type: String,
-  },
+  // firstName: {
+  //   type: String,
+  // },
+  // lastName: {
+  //   type: String,
+  // },
   planId: {
     type: Number,
     default: 1,
