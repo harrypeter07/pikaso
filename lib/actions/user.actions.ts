@@ -1,83 +1,97 @@
-"use server"
+// lib/actions/user.actions.ts
+"use server";
 import { revalidatePath } from "next/cache";
 
-import User from "../database/models/user.model"
-import { connectToDatabase } from "../database/mongoose"
+import User from "../database/models/user.model";
+import { connectToDatabase } from "../database/mongoose";
 import { handleError } from "../utils";
 
-
-
-export async function createUser(user: CreateUserParams){
-    try {
-        await connectToDatabase();
-
-        const newUser = await User.create(user);
-
-        return JSON.parse(JSON.stringify(newUser));
-
-    } catch (error) {
-        handleError(error);
-    }
+// Define type for CreateUserParams (important!)
+interface CreateUserParams {
+  email: string;
+  username: string;
+  photo: string;
+  firstName?: string;
+  lastName?: string;
+  // ... other fields as needed
 }
 
-
-//READ 
-export async function getuserId(userId : string){
-    try {
-        await connectToDatabase();
-
-        const user = await User.findOne({ clerkId: userId})
-
-        if(!user) throw new Error("User Not Found")
-
-            return JSON.parse(JSON.stringify(user));
-
-    } catch(error){
-        handleError(error);
-    }
+// Define type for UpdateUserParams (important!)
+interface UpdateUserParams {
+  email?: string;
+  username?: string;
+  photo?: string;
+  firstName?: string;
+  lastName?: string;
+  planId?: number;
+  creditBalance?: number;
+  // ... other fields as needed
 }
 
-//UPDTE
+export async function createUser(user: CreateUserParams) {
+  try {
+    await connectToDatabase();
 
-export async  function updateUser(clerkId: string , user: UpdateUserParams){
-    try {
-        await connectToDatabase();
-        const updateUser = await User.findOneAndUpdate({clerkId} , user , {
-            new:true,
-        })
+    const newUser = await User.create(user);
 
-        if(!updateUser) throw new Error("User update failed");
-
-        return JSON.parse(JSON.stringify(updateUser))
-    } catch(error){
-        handleError(error);
-    }
-
-
-   
+    return JSON.parse(JSON.stringify(newUser));
+  } catch (error) {
+    handleError(error);
+  }
 }
 
+// READ (Get user by email - more common than clerkId)
+export async function getUserByEmail(email: string) {  // Changed to email
+  try {
+    await connectToDatabase();
 
+    const user = await User.findOne({ email }); // Find by email
 
-export async function deleteUser(clerkId: string){
-    try {
-        await connectToDatabase();
-
-        const userToDelete = await User.findOne({ clerkId});
-
-        if(!userToDelete){
-            throw new Error("User Not Found");
-        }
-
-        //Delete user
-        const deletedUser = await User.findByIdAndDelete(userToDelete._id);
-        revalidatePath("/");
-
-        return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
-    } catch (error){
-        handleError(error)
+    if (!user) {
+      throw new Error("User Not Found");
     }
-    
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+// UPDATE (Use email for updating - more common)
+export async function updateUser(email: string, user: UpdateUserParams) { // Changed to email
+  try {
+    await connectToDatabase();
+    const updatedUser = await User.findOneAndUpdate({ email }, user, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      throw new Error("User update failed");
+    }
+
+    return JSON.parse(JSON.stringify(updatedUser));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function deleteUser(email: string) { // Changed to email
+  try {
+    await connectToDatabase();
+
+    const userToDelete = await User.findOne({ email }); // Find by email
+
+    if (!userToDelete) {
+      throw new Error("User Not Found");
+    }
+
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+    revalidatePath("/");
+
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
+  } catch (error) {
+    handleError(error);
+  }
 }
 
 //use credits
